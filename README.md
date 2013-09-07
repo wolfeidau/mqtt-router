@@ -11,6 +11,12 @@ This module a router for use with MQTT subscriptions.
 npm install mqtt-router
 ```
 
+# TLDR
+
+If you have just started with [MQTT](https://github.com/adamvr/MQTT.js) the first thing you will notice is there is only callback registered for on Message,
+even though you can register multiple subscriptions.. It is therefore up to you the developer to route these to the
+correct handler, which is why I wrote this library.
+
 # usage
 
 ```javascript
