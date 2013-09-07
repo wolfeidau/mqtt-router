@@ -20,26 +20,33 @@ correct handler, which is why I wrote this library.
 # usage
 
 ```javascript
-var mqtt = require('mqtt');
-var mqttrouter = require('mqtt-router');
-var debug = require('debug')('mqtt:consumer');
+var mqtt = require('mqtt')
+  , mqttrouter = require('mqtt-router')
+  , host = 'localhost'
+  , port = '1883';
 
-var client = mqtt.createClient();
+var settings = {
+  keepalive: 1000,
+  protocolId: 'MQIsdp',
+  protocolVersion: 3,
+  clientId: 'client-1'
+}
 
+// client connection
+var client = mqtt.createClient(port, host, settings);
+
+// enable the subscription router
 var router = mqttrouter.wrap(client);
 
-// this is only called ONCE for the matching topic
-router.subscribe('$RPC/time/request', function(topic, message){
-  debug('received', topic, message);
+// subscribe to messages for 'hello/me'
+router.subscribe('hello/me', function(topic, message){
+  console.log('received', topic, message);
 });
 
-log('publish');
-mqttclient.publish('$RPC/time/request', 'hello firstTopic!');
-
-log('publish');
-mqttclient.publish('$RPC/time/reply', 'hello secondTopic!');
-
-
+// subscribe to messages for 'hello/you'
+router.subscribe('hello/you', function(topic, message){
+  console.log('received', topic, message);
+});
 ```
 
 *NOTE:* This currently just does simple subscriptions without wildcards, this is something I will work on next.
