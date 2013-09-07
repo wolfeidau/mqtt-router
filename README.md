@@ -1,4 +1,4 @@
-# mqtt-router [![Build Status](https://travis-ci.org/wolfeidau/mqtt-router.png?branch=master)](https://travis-ci.org/wolfeidau/mqtt-router)
+# mqtt-router [![Build Status](https://drone.io/github.com/wolfeidau/mqtt-router/status.png)](https://drone.io/github.com/wolfeidau/mqtt-router/latest)
 
 This module a router for use with MQTT subscriptions.
 
@@ -13,8 +13,6 @@ npm install mqtt-router
 
 # usage
 
-Exposes an array of functions which retrieves and returns data.
-
 ```javascript
 var mqtt = require('mqtt');
 var mqttrouter = require('mqtt-router');
@@ -24,9 +22,18 @@ var client = mqtt.createClient();
 
 var router = mqttrouter.wrap(client);
 
+// this is only called ONCE for the matching topic
 router.subscribe('$RPC/time/request', function(topic, message){
   debug('received', topic, message);
 });
+
+log('publish');
+mqttclient.publish('$RPC/time/request', 'hello firstTopic!');
+
+log('publish');
+mqttclient.publish('$RPC/time/reply', 'hello secondTopic!');
+
+
 ```
 
 *NOTE:* This currently just does simple subscriptions without wildcards, this is something I will work on next.
