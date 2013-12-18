@@ -47,13 +47,18 @@ router.subscribe('hello/me', function(topic, message){
 router.subscribe('hello/you', function(topic, message){
   console.log('received', topic, message);
 });
+
+// subscribe to messages for 'some/+/you'
+router.subscribe('some/+/you', function(topic, message){
+  console.log('received', topic, message);
+});
+
 ```
 
 *NOTE:* This currently just does simple subscriptions without wildcards, this is something I will work on next.
 
 # TODO
 
-* Work on wild cards using $ and # in the subscription.
 * Look at using more of [houkou](https://github.com/deoxxa/houkou) to break up the the topic into params enabling more generic handlers.
 
 ## License

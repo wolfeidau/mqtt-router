@@ -16,13 +16,13 @@ describe('client', function () {
     var firstTopic = 'TEST/localtime/request';
     var secondTopic = 'TEST/localtime/reply';
 
-    function check(){
+    function check() {
       expect(callback.calledOnce).to.be.true;
       expect(callback.getCall(0).args[0]).to.equal(firstTopic);
       done();
     }
 
-    var callback = sinon.spy(function(topic, message){
+    var callback = sinon.spy(function (topic, message) {
       log('msg', topic, message);
       check();
     });
@@ -36,6 +36,65 @@ describe('client', function () {
     log('publish', secondTopic);
     mqttclient.publish(secondTopic, 'hello secondTopic!');
 
+  });
+
+  it('should route one message to wild card handler', function (done) {
+
+    var mqttclient = mqtt.createClient();
+
+    var firstTopic = 'TEST/beertime/request';
+    var secondTopic = 'TEST/remotetime/reply';
+
+    function check() {
+      expect(callback.calledOnce).to.be.true;
+      expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      done();
+    }
+
+    var callback = sinon.spy(function (topic, message) {
+      log('msg', topic, message);
+      check();
+    });
+
+    var router = mqttrouter.wrap(mqttclient);
+    router.subscribe('TEST/beertime/#', callback);
+
+    log('publish', firstTopic);
+    mqttclient.publish(firstTopic, 'hello firstTopic!');
+
+    log('publish', secondTopic);
+    mqttclient.publish(secondTopic, 'hello secondTopic!');
 
   });
+
+  it('should route one message to single level wild card', function (done) {
+
+    var mqttclient = mqtt.createClient();
+
+    var firstTopic = 'TEST/winetime/request';
+    var secondTopic = 'TEST/whiskeytime/reply';
+
+    function check() {
+      expect(callback.calledOnce).to.be.true;
+      expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      done();
+    }
+
+    var callback = sinon.spy(function (topic, message) {
+      log('msg', topic, message);
+      check();
+    });
+
+    var router = mqttrouter.wrap(mqttclient);
+    router.subscribe('TEST/+/request', callback);
+
+    log('publish', firstTopic);
+    mqttclient.publish(firstTopic, 'hello firstTopic!');
+
+    log('publish', secondTopic);
+    mqttclient.publish(secondTopic, 'hello secondTopic!');
+
+  });
+
+
 });
