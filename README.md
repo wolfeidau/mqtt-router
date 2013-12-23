@@ -17,6 +17,12 @@ If you have just started with [MQTT](https://github.com/adamvr/MQTT.js) the firs
 even though you can register multiple subscriptions.. It is therefore up to you the developer to route these to the
 correct handler, which is why I wrote this library.
 
+I have added a simple override for the topic subscription to enable named params, really this is to avoid the
+inevitable tokenising of the topic which I do every time I build complex topic structures.
+
+*NOTE:* I will need to revisit this with some more validation, but for now it works for my simple requirements.
+
+
 # usage
 
 ```javascript
@@ -48,18 +54,12 @@ router.subscribe('hello/you', function(topic, message){
   console.log('received', topic, message);
 });
 
-// subscribe to messages for 'some/+/you'
+// subscribe to messages for 'some/+/you' with a named param for that token
 router.subscribe('some/+:person/you', function(topic, message, params){
   console.log('received', topic, message);
 });
 
 ```
-
-*NOTE:* This currently just does simple subscriptions without wildcards, this is something I will work on next.
-
-# TODO
-
-* Look at using more of [houkou](https://github.com/deoxxa/houkou) to break up the the topic into params enabling more generic handlers.
 
 ## License
 Copyright (c) 2013 Mark Wolfe
