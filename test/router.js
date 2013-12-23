@@ -67,6 +67,37 @@ describe('client', function () {
 
   });
 
+  it('should route one message to wild card handler with two params', function (done) {
+
+    var mqttclient = mqtt.createClient();
+
+    var firstTopic = 'TEST/greentime/request/1';
+    var secondTopic = 'TEST/sometime/reply';
+
+    function check() {
+      expect(callback.calledOnce).to.be.true;
+      expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      expect(callback.getCall(0).args[2].type).to.equal('request');
+      expect(callback.getCall(0).args[2].no).to.equal('1');
+      done();
+    }
+
+    var callback = sinon.spy(function (topic, message, params) {
+      log('msg', topic, message, params);
+      check();
+    });
+
+    var router = mqttrouter.wrap(mqttclient);
+    router.subscribe('TEST/greentime/+:type/+:no', callback);
+
+    log('publish', firstTopic);
+    mqttclient.publish(firstTopic, 'hello firstTopic!');
+
+    log('publish', secondTopic);
+    mqttclient.publish(secondTopic, 'hello secondTopic!');
+
+  });
+
   it('should route one message to single level wild card', function (done) {
 
     var mqttclient = mqtt.createClient();
