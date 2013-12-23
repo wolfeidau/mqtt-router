@@ -57,7 +57,7 @@ describe('client', function () {
     });
 
     var router = mqttrouter.wrap(mqttclient);
-    router.subscribe('TEST/beertime/#', 'TEST/beertime/:type', callback);
+    router.subscribe('TEST/beertime/#:type', callback);
 
     log('publish', firstTopic);
     mqttclient.publish(firstTopic, 'hello firstTopic!');
@@ -86,7 +86,7 @@ describe('client', function () {
     });
 
     var router = mqttrouter.wrap(mqttclient);
-    router.subscribe('TEST/+/request', 'TEST/:time/request', callback);
+    router.subscribe('TEST/+:time/request', callback);
 
     log('publish', firstTopic);
     mqttclient.publish(firstTopic, 'hello firstTopic!');

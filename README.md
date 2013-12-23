@@ -49,7 +49,7 @@ router.subscribe('hello/you', function(topic, message){
 });
 
 // subscribe to messages for 'some/+/you'
-router.subscribe('some/+/you', 'some/:person/you' function(topic, message, params){
+router.subscribe('some/+:person/you', function(topic, message, params){
   console.log('received', topic, message);
 });
 
