@@ -30,7 +30,7 @@ var settings = {
   protocolId: 'MQIsdp',
   protocolVersion: 3,
   clientId: 'client-1'
-}
+};
 
 // client connection
 var client = mqtt.createClient(port, host, settings);
@@ -49,7 +49,7 @@ router.subscribe('hello/you', function(topic, message){
 });
 
 // subscribe to messages for 'some/+/you'
-router.subscribe('some/+/you', function(topic, message){
+router.subscribe('some/+/you', 'some/:person/you' function(topic, message, params){
   console.log('received', topic, message);
 });
 

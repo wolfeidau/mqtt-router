@@ -51,13 +51,13 @@ describe('client', function () {
       done();
     }
 
-    var callback = sinon.spy(function (topic, message) {
-      log('msg', topic, message);
+    var callback = sinon.spy(function (topic, message, params) {
+      log('msg', topic, message, params);
       check();
     });
 
     var router = mqttrouter.wrap(mqttclient);
-    router.subscribe('TEST/beertime/#', callback);
+    router.subscribe('TEST/beertime/#', 'TEST/beertime/:type', callback);
 
     log('publish', firstTopic);
     mqttclient.publish(firstTopic, 'hello firstTopic!');
@@ -80,13 +80,13 @@ describe('client', function () {
       done();
     }
 
-    var callback = sinon.spy(function (topic, message) {
-      log('msg', topic, message);
+    var callback = sinon.spy(function (topic, message, params) {
+      log('msg', topic, message, params);
       check();
     });
 
     var router = mqttrouter.wrap(mqttclient);
-    router.subscribe('TEST/+/request', callback);
+    router.subscribe('TEST/+/request', 'TEST/:time/request', callback);
 
     log('publish', firstTopic);
     mqttclient.publish(firstTopic, 'hello firstTopic!');
