@@ -1,6 +1,6 @@
 {
   "name": "mqtt-router",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Router for mqtt subscriptions.",
   "main": "index.js",
   "scripts": {
