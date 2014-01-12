@@ -7,11 +7,12 @@ var log = require('debug')('test:mqtt-router');
 var expect = chai.expect;
 var mqttrouter = require('../index.js');
 
-describe('client', function () {
+describe('router', function () {
 
   it('should route one message to the handler', function (done) {
 
     var mqttclient = mqtt.createClient();
+    var router = mqttrouter.wrap(mqttclient);
 
     var firstTopic = 'TEST/localtime/request';
     var secondTopic = 'TEST/localtime/reply';
@@ -19,6 +20,7 @@ describe('client', function () {
     function check() {
       expect(callback.calledOnce).to.be.true;
       expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      router.reset();
       done();
     }
 
@@ -27,7 +29,6 @@ describe('client', function () {
       check();
     });
 
-    var router = mqttrouter.wrap(mqttclient);
     router.subscribe(firstTopic, callback);
 
     log('publish', firstTopic);
@@ -41,6 +42,7 @@ describe('client', function () {
   it('should route one message to wild card handler', function (done) {
 
     var mqttclient = mqtt.createClient();
+    var router = mqttrouter.wrap(mqttclient);
 
     var firstTopic = 'TEST/beertime/request';
     var secondTopic = 'TEST/remotetime/reply';
@@ -48,6 +50,7 @@ describe('client', function () {
     function check() {
       expect(callback.calledOnce).to.be.true;
       expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      router.reset();
       done();
     }
 
@@ -56,7 +59,6 @@ describe('client', function () {
       check();
     });
 
-    var router = mqttrouter.wrap(mqttclient);
     router.subscribe('TEST/beertime/#:type', callback);
 
     log('publish', firstTopic);
@@ -70,6 +72,7 @@ describe('client', function () {
   it('should route one message to wild card handler with two params', function (done) {
 
     var mqttclient = mqtt.createClient();
+    var router = mqttrouter.wrap(mqttclient);
 
     var firstTopic = 'TEST/greentime/request/1';
     var secondTopic = 'TEST/sometime/reply';
@@ -79,6 +82,7 @@ describe('client', function () {
       expect(callback.getCall(0).args[0]).to.equal(firstTopic);
       expect(callback.getCall(0).args[2].type).to.equal('request');
       expect(callback.getCall(0).args[2].no).to.equal('1');
+      router.reset();
       done();
     }
 
@@ -87,7 +91,6 @@ describe('client', function () {
       check();
     });
 
-    var router = mqttrouter.wrap(mqttclient);
     router.subscribe('TEST/greentime/+:type/+:no', callback);
 
     log('publish', firstTopic);
@@ -101,6 +104,7 @@ describe('client', function () {
   it('should route one message to single level wild card', function (done) {
 
     var mqttclient = mqtt.createClient();
+    var router = mqttrouter.wrap(mqttclient);
 
     var firstTopic = 'TEST/winetime/request';
     var secondTopic = 'TEST/whiskeytime/reply';
@@ -108,6 +112,7 @@ describe('client', function () {
     function check() {
       expect(callback.calledOnce).to.be.true;
       expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      router.reset();
       done();
     }
 
@@ -116,7 +121,6 @@ describe('client', function () {
       check();
     });
 
-    var router = mqttrouter.wrap(mqttclient);
     router.subscribe('TEST/+:time/request', callback);
 
     log('publish', firstTopic);
