@@ -74,8 +74,8 @@ describe('router', function () {
     var mqttclient = mqtt.createClient();
     var router = mqttrouter.wrap(mqttclient);
 
-    var firstTopic = 'TEST/greentime/request/1';
-    var secondTopic = 'TEST/sometime/reply';
+    var firstTopic = '$TEST/greentime/request/1';
+    var secondTopic = '$TEST/sometime/reply';
 
     function check() {
       expect(callback.calledOnce).to.be.true;
@@ -91,7 +91,7 @@ describe('router', function () {
       check();
     });
 
-    router.subscribe('TEST/greentime/+:type/+:no', callback);
+    router.subscribe('$TEST/greentime/+:type/+:no', callback);
 
     log('publish', firstTopic);
     mqttclient.publish(firstTopic, 'hello firstTopic!');
@@ -130,6 +130,37 @@ describe('router', function () {
     mqttclient.publish(secondTopic, 'hello secondTopic!');
 
   });
+
+  it('should route one message to the handler with $ in topic name', function (done) {
+
+    var mqttclient = mqtt.createClient();
+    var router = mqttrouter.wrap(mqttclient);
+
+    var firstTopic = '$TEST/localtime/request';
+    var secondTopic = '$TEST/localtime/reply';
+
+    function check() {
+      expect(callback.calledOnce).to.be.true;
+      expect(callback.getCall(0).args[0]).to.equal(firstTopic);
+      router.reset();
+      done();
+    }
+
+    var callback = sinon.spy(function (topic, message) {
+      log('msg', topic, message);
+      check();
+    });
+
+    router.subscribe(firstTopic, callback);
+
+    log('publish', firstTopic);
+    mqttclient.publish(firstTopic, 'hello firstTopic!');
+
+    log('publish', secondTopic);
+    mqttclient.publish(secondTopic, 'hello secondTopic!');
+
+  });
+
 
 
 });
