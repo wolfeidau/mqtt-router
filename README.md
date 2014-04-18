@@ -27,19 +27,14 @@ inevitable tokenising of the topic which I do every time I build complex topic s
 
 ```javascript
 var mqtt = require('mqtt')
-  , mqttrouter = require('mqtt-router')
-  , host = 'localhost'
-  , port = '1883';
+  , mqttrouter = require('mqtt-router');
 
 var settings = {
-  keepalive: 1000,
-  protocolId: 'MQIsdp',
-  protocolVersion: 3,
-  clientId: 'client-1'
+  reconnectPeriod: 5000
 };
 
 // client connection
-var client = mqtt.createClient(port, host, settings);
+var client = mqtt.connect('mqtt://localhost', settings);
 
 // enable the subscription router
 var router = mqttrouter.wrap(client);
@@ -60,6 +55,9 @@ router.subscribe('some/+:person/you', function(topic, message, params){
 });
 
 ```
+
+One thing to note is that subscriptions are refreshed on reconnect, the status of the connection is also
+exposed via the `isConnected` method.
 
 ## License
 Copyright (c) 2013 Mark Wolfe

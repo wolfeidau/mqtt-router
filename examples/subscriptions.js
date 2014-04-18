@@ -13,5 +13,7 @@ router.subscribe('$TEST/dev/reply', function(topic, message){
   console.log('reply handler', topic, message);
 });
 
+setInterval(function() {
 client.publish('$TEST/dev/reply', 'hello me!');
 client.publish('$TEST/dev/request', 'hello me!');
+}, 5000);
