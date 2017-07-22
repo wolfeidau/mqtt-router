@@ -1,7 +1,7 @@
-'use strict';
+'use strict'
 
-var Router = require('./lib/mqtt-router.js');
+var Router = require('./lib/mqtt-router.js')
 
-exports.wrap = function(mqttclient){
-  return new Router(mqttclient);
-};
+exports.wrap = function (mqttclient) {
+  return new Router(mqttclient)
+}

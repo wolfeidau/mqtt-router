@@ -1,6 +1,6 @@
 {
   "name": "mqtt-router",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "description": "Router for mqtt subscriptions.",
   "main": "index.js",
   "scripts": {
@@ -21,13 +21,14 @@
     "url": "https://github.com/wolfeidau/mqtt-router/issues"
   },
   "dependencies": {
-    "mqtt": "~0.3.1",
-    "houkou": "~0.2.1",
-    "debug": "~0.7.2"
+    "mqtt": "~2.9.1",
+    "houkou": "~0.2.2",
+    "debug": "~2.6.8"
   },
   "devDependencies": {
-    "chai": "~1.7.2",
-    "sinon": "~1.7.3",
-    "mocha": "~1.12.1"
+    "chai": "~4.0.2",
+    "mocha": "~3.4.2",
+    "mosca": "^2.5.1",
+    "sinon": "~2.3.7"
   }
 }
