@@ -10,6 +10,9 @@
     "type": "git",
     "url": "https://github.com/wolfeidau/mqtt-router.git"
   },
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "keywords": [
     "MQTT",
     "router",
@@ -29,6 +32,7 @@
     "chai": "~4.0.2",
     "mocha": "~3.4.2",
     "mosca": "^2.5.1",
+    "prettier": "^1.5.3",
     "sinon": "~2.3.7"
   }
 }
