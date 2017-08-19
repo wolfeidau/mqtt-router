@@ -48,6 +48,30 @@ describe('router', function () {
     mqttclient.publish(secondTopic, 'hello secondTopic!')
   })
 
+  it('should route only one message to the handler (unsubscribe)', function (done) {
+    var mqttclient = mqtt.connect(`mqtt://localhost:${mqttBroker.opts.port}`)
+    var router = mqttrouter.wrap(mqttclient)
+
+    var firstTopic = 'TEST/localtime/unsubscribe'
+
+    function check () {
+      callback.calledOnce.should.equal(true)
+      callback.getCall(0).args[0].should.equal(firstTopic)
+      done()
+    }
+
+    var callback = sinon.spy(function (topic, message) {
+      log('msg', topic, message)
+      router.unsubscribe(firstTopic, callback)
+      router.subscribe(firstTopic, check)
+      log('publish', firstTopic)
+      mqttclient.publish(firstTopic, 'hello firstTopic!')
+    })
+    router.subscribe(firstTopic, callback)
+    log('publish', firstTopic)
+    mqttclient.publish(firstTopic, 'hello firstTopic!')
+  })
+
   it('should route one message to wild card handler', function (done) {
     var mqttclient = mqtt.connect(`mqtt://localhost:${mqttBroker.opts.port}`)
     var router = mqttrouter.wrap(mqttclient)
